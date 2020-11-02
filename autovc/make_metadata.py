@@ -9,7 +9,7 @@ import numpy as np
 import torch
 
 C = D_VECTOR(dim_input=80, dim_cell=768, dim_emb=256).eval()
-c_checkpoint = torch.load('3000000-BL.ckpt', map_location=torch.device('cpu'))
+c_checkpoint = torch.load('data/3000000-BL.ckpt', map_location=torch.device('cpu'))
 new_state_dict = OrderedDict()
 for key, val in c_checkpoint['model_b'].items():
     new_key = key[7:]

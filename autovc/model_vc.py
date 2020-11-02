@@ -76,6 +76,7 @@ class Encoder(nn.Module):
         
         codes = []
         for i in range(0, outputs.size(1), self.freq):
+            # down sample
             codes.append(torch.cat((out_forward[:,i+self.freq-1,:],out_backward[:,i,:]), dim=-1))
 
         return codes
@@ -86,7 +87,7 @@ class Decoder(nn.Module):
     """
     def __init__(self, dim_neck, dim_emb, dim_pre):
         super(Decoder, self).__init__()
-        
+        # up sample
         self.lstm1 = nn.LSTM(dim_neck*2+dim_emb, dim_pre, 1, batch_first=True)
         
         convolutions = []
@@ -179,7 +180,7 @@ class Generator(nn.Module):
         self.postnet = Postnet()
 
     def forward(self, x, c_org, c_trg):
-                
+        # output from content encoder        
         codes = self.encoder(x, c_org)
         if c_trg is None:
             return torch.cat(codes, dim=-1)
@@ -189,11 +190,16 @@ class Generator(nn.Module):
             tmp.append(code.unsqueeze(1).expand(-1,int(x.size(1)/len(codes)),-1))
         code_exp = torch.cat(tmp, dim=1)
         
+        # up sample
         encoder_outputs = torch.cat((code_exp, c_trg.unsqueeze(1).expand(-1,x.size(1),-1)), dim=-1)
         
+        # initial reconstruction
         mel_outputs = self.decoder(encoder_outputs)
-                
+
+        # residual signal        
         mel_outputs_postnet = self.postnet(mel_outputs.transpose(2,1))
+
+        # final conversion        
         mel_outputs_postnet = mel_outputs + mel_outputs_postnet.transpose(2,1)
         
         mel_outputs = mel_outputs.unsqueeze(1)

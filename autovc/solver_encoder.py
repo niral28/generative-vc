@@ -88,12 +88,12 @@ class Solver(object):
                         
             # Identity mapping loss
             x_identic, x_identic_psnt, code_real = self.G(x_real, emb_org, emb_org)
-            g_loss_id = F.mse_loss(x_real, x_identic)   
-            g_loss_id_psnt = F.mse_loss(x_real, x_identic_psnt)   
+            g_loss_id = F.mse_loss(x_real, x_identic)   # initial reconstruction loss 
+            g_loss_id_psnt = F.mse_loss(x_real, x_identic_psnt)    # final reconstruction loss
             
             # Code semantic loss.
-            code_reconst = self.G(x_identic_psnt, emb_org, None)
-            g_loss_cd = F.l1_loss(code_real, code_reconst)
+            code_reconst = self.G(x_identic_psnt, emb_org, None) 
+            g_loss_cd = F.l1_loss(code_real, code_reconst) # content loss
 
 
             # Backward and optimize.
@@ -110,6 +110,7 @@ class Solver(object):
             writer.add_scalar('G/loss_id', loss['G/loss_id'], i)
             writer.add_scalar('G/loss_id_psnt', loss['G/loss_id_psnt'], i)
             writer.add_scalar('G/loss_cd', loss['G/loss_cd'], i)
+            writer.add_scalar('G/loss', )
             
             # =================================================================================== #
             #                                 4. Miscellaneous                                    #
