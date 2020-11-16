@@ -25,6 +25,7 @@ class Utterances(data.Dataset):
         dataset = manager.list(len(meta)*[None])  
         processes = []
         for i in range(0, len(meta), self.step):
+            print('HERE:',i)
             p = Process(target=self.load_data, 
                         args=(meta[i:i+self.step],dataset,i))  
             p.start()

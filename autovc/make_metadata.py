@@ -9,7 +9,7 @@ import numpy as np
 import torch
 
 C = D_VECTOR(dim_input=80, dim_cell=768, dim_emb=256).eval()
-c_checkpoint = torch.load('data/3000000-BL.ckpt', map_location=torch.device('cpu'))
+c_checkpoint = torch.load('./../data/3000000-BL.ckpt', map_location=torch.device('cpu'))
 new_state_dict = OrderedDict()
 for key, val in c_checkpoint['model_b'].items():
     new_key = key[7:]
@@ -19,7 +19,7 @@ num_uttrs = 10
 len_crop = 128
 
 # Directory containing mel-spectrograms
-rootDir = './spmel'
+rootDir = './../data/spmel_wavs'
 dirName, subdirList, _ = next(os.walk(rootDir))
 print('Found directory: %s' % dirName)
 
@@ -30,7 +30,7 @@ for speaker in sorted(subdirList):
     utterances = []
     utterances.append(speaker)
     _, _, fileList = next(os.walk(os.path.join(dirName,speaker)))
-    
+    print(len(fileList))
     # make speaker embedding
     assert len(fileList) >= num_uttrs
     idx_uttrs = np.random.choice(len(fileList), size=num_uttrs, replace=False)
@@ -54,6 +54,6 @@ for speaker in sorted(subdirList):
         utterances.append(os.path.join(speaker,fileName))
     speakers.append(utterances)
     
-with open(os.path.join(rootDir, 'train.pkl'), 'wb') as handle:
+with open(os.path.join(rootDir, 'test.pkl'), 'wb') as handle:
     pickle.dump(speakers, handle)
 

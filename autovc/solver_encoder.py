@@ -1,7 +1,7 @@
 from model_vc import Generator
 import torch
 import torch.nn.functional as F
-from torch.utils.tensorboard import SummaryWriter
+# from torch.utils.tensorboard import SummaryWriter
 import time
 import datetime
 
@@ -55,7 +55,7 @@ class Solver(object):
     def train(self):
         # Set data loader.
         data_loader = self.vcc_loader
-        writer = SummaryWriter()
+        # writer = SummaryWriter()
         # Print logs in specified order
         keys = ['G/loss_id','G/loss_id_psnt','G/loss_cd']
             
@@ -107,10 +107,10 @@ class Solver(object):
             loss['G/loss_id'] = g_loss_id.item()
             loss['G/loss_id_psnt'] = g_loss_id_psnt.item()
             loss['G/loss_cd'] = g_loss_cd.item()
-            writer.add_scalar('G/loss_id', loss['G/loss_id'], i)
-            writer.add_scalar('G/loss_id_psnt', loss['G/loss_id_psnt'], i)
-            writer.add_scalar('G/loss_cd', loss['G/loss_cd'], i)
-            writer.add_scalar('G/loss', )
+            # writer.add_scalar('G/loss_id', loss['G/loss_id'], i)
+            # writer.add_scalar('G/loss_id_psnt', loss['G/loss_id_psnt'], i)
+            # writer.add_scalar('G/loss_cd', loss['G/loss_cd'], i)
+            # writer.add_scalar('G/loss', )
             
             # =================================================================================== #
             #                                 4. Miscellaneous                                    #

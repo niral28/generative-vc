@@ -61,24 +61,27 @@ class Encoder(nn.Module):
         self.lstm = nn.LSTM(512, dim_neck, 2, batch_first=True, bidirectional=True)
 
     def forward(self, x, c_org):
+	print('In encoder')
         x = x.squeeze(1).transpose(2,1)
+        print('Squeeze & transpose:', x.shape)
         c_org = c_org.unsqueeze(-1).expand(-1, -1, x.size(-1))
         x = torch.cat((x, c_org), dim=1)
-        
+        print('concatenate', x.shape)
         for conv in self.convolutions:
             x = F.relu(conv(x))
         x = x.transpose(1, 2)
-        
+        print('After convolutions:', x.shape)
         self.lstm.flatten_parameters()
         outputs, _ = self.lstm(x)
-        out_forward = outputs[:, :, :self.dim_neck]
+        print('Outputs shape', outputs.shape)
+	out_forward = outputs[:, :, :self.dim_neck]
         out_backward = outputs[:, :, self.dim_neck:]
         
         codes = []
         for i in range(0, outputs.size(1), self.freq):
             # down sample
             codes.append(torch.cat((out_forward[:,i+self.freq-1,:],out_backward[:,i,:]), dim=-1))
-
+	print('Length of codes', len(codes))
         return codes
       
         
@@ -180,8 +183,11 @@ class Generator(nn.Module):
         self.postnet = Postnet()
 
     def forward(self, x, c_org, c_trg):
-        # output from content encoder        
+        # output from content encoder
+        print("Input:",x.shape)
+        print("Content Embedding:", c_org.shape)
         codes = self.encoder(x, c_org)
+        print(len(codes))
         if c_trg is None:
             return torch.cat(codes, dim=-1)
         
@@ -192,10 +198,11 @@ class Generator(nn.Module):
         
         # up sample
         encoder_outputs = torch.cat((code_exp, c_trg.unsqueeze(1).expand(-1,x.size(1),-1)), dim=-1)
-        
+        print("Decoder Input:", encoder_outputs.shape)
         # initial reconstruction
         mel_outputs = self.decoder(encoder_outputs)
-
+        
+        print("Postnet Inputs:",(mel_outputs.transpose(2,1)).shape)
         # residual signal        
         mel_outputs_postnet = self.postnet(mel_outputs.transpose(2,1))
 

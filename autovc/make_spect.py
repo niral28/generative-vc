@@ -37,9 +37,9 @@ b, a = butter_highpass(30, 16000, order=5)
 
 
 # audio file directory
-rootDir = './wav'
+rootDir = './../data/wavs'
 # spectrogram directory
-targetDir = './spmel'
+targetDir = './../data/spmel_wavs'
 
 
 dirName, subdirList, _ = next(os.walk(rootDir))
