@@ -24,7 +24,7 @@ This repo contains several Voice Conversion Techniques tried using generative de
 
     - Download [model checkpoints](https://drive.google.com/drive/folders/1lumwj3ijr0SMvWGWo-HM_RjgNUHiqGnQ?usp=sharing)
 
-    - Download [my custom weights]()
+    - Download [my custom weights](https://drive.google.com/drive/folders/1lumwj3ijr0SMvWGWo-HM_RjgNUHiqGnQ?usp=sharing)
 
     - See `autovc_vc_sample.wav` for a sample male to female voice conversion attempt. 
     - ![AutoVC Voice Conversion](images/autovc.png)
