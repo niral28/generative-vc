@@ -57,6 +57,10 @@ This repo contains several Voice Conversion Techniques tried using generative de
     - See several helper notebooks implemented in the exploration phase. May be useful to get started. 
 
 
-
 ## System Diagram:
 ![System Diagram](images/system_diagram.png?raw=true "Input")
+
+## Overall Results:
+Computed Mean Opinion Score on generated voice conversion using `MOSNet` (included in the repo, fork of https://github.com/lochenchou/MOSNet).
+
+![Evaluation Results](images/VCResults.png?raw=true "Input")
